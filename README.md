@@ -36,7 +36,18 @@ Engineered for resource-constrained environments (developed natively on a Linux 
 * **Frame Optimization:** Processes every $N$-th frame to maximize throughput and ensure consistent FPS performance on CPU-bound hardware.
 
 ---
+## 📂 Project Architecture
 
+```text
+vision-analytics-dashboard/
+├── app.py                     # Main Streamlit UI frontend and loop controller
+├── requirements.txt           # Project dependencies
+├── core_models/
+│   ├── yolo_tracker.py        # YOLOv8 + ByteTrack & tripwire logic
+│   ├── gesture_tracker.py     # MediaPipe hand landmark detection
+│   └── heatmap_tracker.py     # NumPy spatial density matrix accumulation
+└── README.md                  # Project documentation
+```
 ## 💻 Local Installation & Setup
 
 **1. Clone the repository:**
