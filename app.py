@@ -4,6 +4,7 @@ import tempfile
 import pandas as pd
 from core_models.yolo_tracker import ObjectTracker
 from core_models.gesture_tracker import GestureTracker
+from core_models.heatmap_tracker import HeatmapTracker
 
 st.set_page_config(page_title="Vision Analytics Dashboard", layout="wide")
 
@@ -12,16 +13,15 @@ st.sidebar.header("Control Panel")
 
 app_mode = st.sidebar.selectbox(
     "Choose Analytics Module", 
-    ["Crowd Counting (YOLOv8)", "Gesture Control (MediaPipe)"]
+    ["Crowd Counting (YOLOv8)", "Gesture Control (MediaPipe)", "Spatial Heatmap (Density Analysis)"]
 )
 
-# Tripwire Orientation selector for YOLO mode
 tripwire_dir = "Horizontal"
 if app_mode == "Crowd Counting (YOLOv8)":
     tripwire_dir = st.sidebar.radio(
         "Tripwire Direction",
         ["Horizontal", "Vertical"],
-        help="Select Horizontal for subjects walking toward/away from camera, Vertical for left-to-right movement."
+        help="Select Horizontal for subjects walking toward/away, Vertical for left-to-right."
     )
 
 uploaded_video = st.sidebar.file_uploader("Upload Video (.mp4, .mov)", type=['mp4', 'mov', 'avi'])
@@ -34,8 +34,10 @@ if uploaded_video is not None:
     
     if app_mode == "Crowd Counting (YOLOv8)":
         tracker = ObjectTracker(direction=tripwire_dir)
-    else:
+    elif app_mode == "Gesture Control (MediaPipe)":
         tracker = GestureTracker()
+    else:
+        tracker = HeatmapTracker()
 
     stframe = st.empty()
     analytics_placeholder = st.empty()
@@ -55,7 +57,7 @@ if uploaded_video is not None:
             
         processed_frame, metric = tracker.process_frame(frame)
         
-        metric_label = "Tripwire Crossings" if app_mode == "Crowd Counting (YOLOv8)" else "Gesture Status"
+        metric_label = "Metric Count" if app_mode != "Spatial Heatmap (Density Analysis)" else "Active Density"
         analytics_data.append({"Frame": frame_count, metric_label: metric})
 
         rgb_frame = cv2.cvtColor(processed_frame, cv2.COLOR_BGR2RGB)
