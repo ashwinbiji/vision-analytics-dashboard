@@ -15,6 +15,15 @@ app_mode = st.sidebar.selectbox(
     ["Crowd Counting (YOLOv8)", "Gesture Control (MediaPipe)"]
 )
 
+# Tripwire Orientation selector for YOLO mode
+tripwire_dir = "Horizontal"
+if app_mode == "Crowd Counting (YOLOv8)":
+    tripwire_dir = st.sidebar.radio(
+        "Tripwire Direction",
+        ["Horizontal", "Vertical"],
+        help="Select Horizontal for subjects walking toward/away from camera, Vertical for left-to-right movement."
+    )
+
 uploaded_video = st.sidebar.file_uploader("Upload Video (.mp4, .mov)", type=['mp4', 'mov', 'avi'])
 
 if uploaded_video is not None:
@@ -24,7 +33,7 @@ if uploaded_video is not None:
     cap = cv2.VideoCapture(tfile.name)
     
     if app_mode == "Crowd Counting (YOLOv8)":
-        tracker = ObjectTracker()
+        tracker = ObjectTracker(direction=tripwire_dir)
     else:
         tracker = GestureTracker()
 
@@ -46,12 +55,12 @@ if uploaded_video is not None:
             
         processed_frame, metric = tracker.process_frame(frame)
         
-        metric_label = "People Count" if app_mode == "Crowd Counting (YOLOv8)" else "Gesture Status"
+        metric_label = "Tripwire Crossings" if app_mode == "Crowd Counting (YOLOv8)" else "Gesture Status"
         analytics_data.append({"Frame": frame_count, metric_label: metric})
 
         rgb_frame = cv2.cvtColor(processed_frame, cv2.COLOR_BGR2RGB)
         
-        stframe.image(rgb_frame, channels="RGB", use_container_width=True)
+        stframe.image(rgb_frame, channels="RGB", width="stretch")
         analytics_placeholder.metric(label=metric_label, value=metric)
 
     cap.release()
