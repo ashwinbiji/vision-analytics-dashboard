@@ -9,7 +9,7 @@
 
 An interactive, edge-computing computer vision platform built to process video streams in real-time. This application performs automated crowd tracking and hand gesture detection, exporting raw inference metrics into structured CSV analytics. 
 
-Engineered for resource-constrained environments (developed natively on a Linux Mint live USB), the architecture optimizes CPU inference loops and handles asynchronous UI updates statelessly.
+Engineered for resource-constrained environments (developed natively on a Linux), the architecture optimizes CPU inference loops and handles asynchronous UI updates statelessly.
 
 🚀 **Live Cloud Demo:** [View on Hugging Face Spaces](https://huggingface.co/spaces/YOUR_HF_USERNAME/vision-analytics-dashboard)
 
