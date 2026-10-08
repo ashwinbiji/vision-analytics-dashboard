@@ -52,7 +52,7 @@ vision-analytics-dashboard/
 
 **1. Clone the repository:**
 `bash
-git clone https://github.com/YOUR_USERNAME/vision-analytics-dashboard.git
+git clone https://github.com/ashwinbiji/vision-analytics-dashboard.git
 cd vision-analytics-dashboard
 `
 
