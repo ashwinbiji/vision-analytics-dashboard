@@ -1,5 +1,19 @@
+# Virtual Environments
 cv_env/
+venv/
+env/
+
+# Python Cache
 __pycache__/
+*.pyc
 *.mp4
 *.pt
+
+# Large AI Model Files (GitHub blocks files > 100MB)
+models/*.pt
+models/*.caffemodel
+models/*.task
+*.pt
+
+# OS generated files
 .DS_Store
