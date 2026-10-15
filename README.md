@@ -1,4 +1,3 @@
-
 # 👁️ Real-Time Vision Analytics Dashboard
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)
@@ -9,8 +8,7 @@
 
 An interactive, edge-computing computer vision platform built to process video streams in real-time. This application performs automated crowd tracking and hand gesture detection, exporting raw inference metrics into structured CSV analytics. 
 
-Engineered for resource-constrained environments (developed natively on a Linux), the architecture optimizes CPU inference loops and handles asynchronous UI updates statelessly.
-
+Engineered for resource-constrained environments (developed natively on Linux), the architecture optimizes CPU inference loops and handles asynchronous UI updates statelessly.
 
 ---
 
@@ -28,13 +26,14 @@ Engineered for resource-constrained environments (developed natively on a Linux)
 
 ## 🚀 Core Features
 
-* **Multi-Directional Virtual Tripwires:** Engineered Cartesian vector logic to track when a bounding box centroid crosses a user-defined threshold. Supports both Horizontal (forward/backward movement) and Vertical (lateral movement) orientations.
-* **Stateful Object Tracking:** Integrates ByteTrack to maintain object identity across frames, ensuring enterprise-grade accuracy in crowd counting.
-* **Hand Gesture Recognition:** Tracks skeletal hand joints and calculates the geometric distance between thumb and index finger tips to register input gestures (e.g., pinch detection).
-* **Telemetry Data Export:** Converts real-time frame telemetry into structured Pandas DataFrames with one-click CSV export functionality for downstream data pipelines.
-* **Frame Optimization:** Processes every $N$-th frame to maximize throughput and ensure consistent FPS performance on CPU-bound hardware.
+- **Multi-Directional Virtual Tripwires:** Engineered Cartesian vector logic to track when a bounding box centroid crosses a user-defined threshold. Supports both Horizontal (forward/backward movement) and Vertical (lateral movement) orientations.
+- **Stateful Object Tracking:** Integrates ByteTrack to maintain object identity across frames, ensuring enterprise-grade accuracy in crowd counting.
+- **Hand Gesture Recognition:** Tracks skeletal hand joints and calculates the geometric distance between thumb and index finger tips to register input gestures (e.g., pinch detection).
+- **Telemetry Data Export:** Converts real-time frame telemetry into structured Pandas DataFrames with one-click CSV export functionality for downstream data pipelines.
+- **Frame Optimization:** Processes every N-th frame to maximize throughput and ensure consistent FPS performance on CPU-bound hardware.
 
 ---
+
 ## 📂 Project Architecture
 
 ```text
@@ -47,29 +46,40 @@ vision-analytics-dashboard/
 │   └── heatmap_tracker.py     # NumPy spatial density matrix accumulation
 └── README.md                  # Project documentation
 ```
+
+---
+
 ## 💻 Local Installation & Setup
 
 **1. Clone the repository:**
-`bash
+```bash
 git clone https://github.com/ashwinbiji/vision-analytics-dashboard.git
 cd vision-analytics-dashboard
-`
+```
 
 **2. Initialize the virtual environment:**
-`bash
+
+*For Linux / macOS:*
+```bash
 python3 -m venv cv_env
 source cv_env/bin/activate
-`
+```
+
+*For Windows 11 (Command Prompt or PowerShell):*
+```cmd
+python -m venv cv_env
+cv_env\Scripts\activate
+```
 
 **3. Install dependencies:**
-`bash
+```bash
 pip install -r requirements.txt
-`
+```
 
 **4. Launch the dashboard:**
-`bash
-python3 -m streamlit run app.py
-`
+```bash
+streamlit run app.py
+```
 
 ---
 
@@ -86,4 +96,3 @@ python3 -m streamlit run app.py
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-EOF
