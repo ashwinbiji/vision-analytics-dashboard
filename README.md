@@ -11,7 +11,6 @@ An interactive, edge-computing computer vision platform built to process video s
 
 Engineered for resource-constrained environments (developed natively on a Linux), the architecture optimizes CPU inference loops and handles asynchronous UI updates statelessly.
 
-🚀 **Live Cloud Demo:** [View on Hugging Face Spaces](https://huggingface.co/spaces/YOUR_HF_USERNAME/vision-analytics-dashboard)
 
 ---
 
