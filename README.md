@@ -62,12 +62,17 @@ cd vision-analytics-dashboard
 *For Linux / macOS:*
 ```bash
 python3 -m venv cv_env
+```
+```bash
 source cv_env/bin/activate
 ```
 
 *For Windows 11 (Command Prompt or PowerShell):*
-```cmd
+python 3.12 is prefered.!!!
+```bash
 python -m venv cv_env
+```
+```bash
 cv_env\Scripts\activate
 ```
 
