@@ -30,6 +30,13 @@ class DemographicsTracker:
 
     def process_frame(self, frame):
         h, w, _ = frame.shape
+
+        # 1. Dynamic scaling factors (clean, balanced font)
+        box_thickness = max(2, int(w / 400))
+        font_scale = max(0.45, w / 950)
+        font_thickness = max(1, int(box_thickness * 0.7))
+        font = cv2.FONT_HERSHEY_SIMPLEX
+
         results = self.model.track(frame, persist=True, tracker="bytetrack.yaml", verbose=False)
         current_visible = 0
 
@@ -49,7 +56,6 @@ class DemographicsTracker:
                     if track_id not in self.track_history:
                         inference_done = False
                         if self.dnn_available:
-                            # Focus strictly on the head/face region (upper 35% of the person box)
                             box_height = y2 - y1
                             face_y2 = y1 + int(box_height * 0.35)
                             person_crop = frame[y1:face_y2, x1:x2]
@@ -69,20 +75,33 @@ class DemographicsTracker:
                                     pass
                         
                         if not inference_done:
-                            # Deterministic fallback based on track_id so it remains consistent per person
                             g_fallback = self.GENDER_LIST[int(track_id) % len(self.GENDER_LIST)]
                             a_fallback = self.AGE_INTERVALS[int(track_id) % len(self.AGE_INTERVALS)]
                             self.track_history[track_id] = f"{g_fallback}, {a_fallback}"
 
-                    demo_label = self.track_history.get(track_id, "Processing")
+                    demo_label = f"ID:{int(track_id)} | {self.track_history.get(track_id, 'Processing')}"
 
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    cv2.putText(frame, f"ID:{int(track_id)} | {demo_label}", (x1, y1 - 10), 
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    # Bounding box
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), box_thickness)
+                    
+                    # Smart Aligned Label (no background box, boundary safe)
+                    (tw, th), _ = cv2.getTextSize(demo_label, font, font_scale, font_thickness)
+                    text_y = y1 - 8 if (y1 - th - 8) > 0 else y1 + th + 8
+                    text_x = max(5, min(x1, w - tw - 5))
 
-        cv2.putText(frame, "Demographics Tracker Active", (20, 40), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
-        cv2.putText(frame, f"Visible People: {current_visible}", (20, 80), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+                    cv2.putText(frame, demo_label, (text_x, text_y), font, font_scale, (0, 255, 0), font_thickness, cv2.LINE_AA)
+
+        # 2. Dynamic Top-Left Telemetry (stacked cleanly)
+        hud1 = "Demographics Tracker Active"
+        hud2 = f"Visible People: {current_visible}"
+        
+        (w1, h1), _ = cv2.getTextSize(hud1, font, font_scale, font_thickness)
+        (w2, h2), _ = cv2.getTextSize(hud2, font, font_scale, font_thickness)
+
+        line1_y = 15 + h1
+        line2_y = line1_y + h2 + 8
+
+        cv2.putText(frame, hud1, (20, line1_y), font, font_scale, (0, 255, 255), font_thickness, cv2.LINE_AA)
+        cv2.putText(frame, hud2, (20, line2_y), font, font_scale, (0, 255, 0), font_thickness, cv2.LINE_AA)
 
         return frame, current_visible
