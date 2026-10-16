@@ -88,6 +88,26 @@ streamlit run app.py
 
 ---
 
+## Windows 11 Setup Guide (Python 3.12)
+
+> **Important:** To avoid C/C++ compilation errors (`meson.build` / `cl.exe missing`) caused by uncompiled packages on Python 3.13+, this project strictly requires **Python 3.11 or 3.12** on Windows. Pre-compiled binary wheels (`.whl`) are fully supported on these versions.
+
+### 1. Install Python 3.12 via Windows Package Manager
+
+Open **Command Prompt** or **PowerShell** and run:
+
+```cmd
+winget install Python.Python.3.12
+cd path\to\vision-analytics-dashboard
+
+py -3.12 -m venv cv_env
+cv_env\Scripts\activate
+
+python -m pip install --upgrade pip
+pip install streamlit opencv-python-headless ultralytics mediapipe pandas
+streamlit run app.py
+```
+
 ## 📊 Usage Guide
 
 1. Launch the Streamlit application.
