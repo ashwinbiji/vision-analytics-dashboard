@@ -104,7 +104,7 @@ py -3.12 -m venv cv_env
 cv_env\Scripts\activate
 
 python -m pip install --upgrade pip
-pip install streamlit opencv-python-headless ultralytics mediapipe pandas
+pip install -r requirements.txt
 streamlit run app.py
 ```
 
